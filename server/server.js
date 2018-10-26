@@ -14,6 +14,17 @@ var io = socketIO(server);
 // If go localhost:3000/help.html, the /public/help.html will be loaded without type /public/ at URL.
 app.use(express.static(publicPath));
 
+// On connect with socket
+io.on('connection', (socket) => {
+	console.log('New user connected');
+	
+	// On disconnect with socket
+	socket.on('disconnect', () => {
+		console.log('A user disconnected');
+	});
+});
+
+
 // Starting server
 server.listen(port, () => {
 	console.log(`Server is up at port ${port}`);
