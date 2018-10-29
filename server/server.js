@@ -34,11 +34,11 @@ io.on('connection', (socket) => {
 	socket.on('createMessage', (message) => {
 		console.log('createMessage', message);
 		// Emitting an event to client
-		// io.emit('newMessage', {
-		// 	from: message.from,
-		// 	text: message.text,
-		// 	createdAt: new Date().getTime()
-		// });
+		io.emit('newMessage', {
+			from: message.from,
+			text: message.text,
+			createdAt: new Date().getTime()
+		});
 
 		// Emit an event to everybody but who sent the message
 		socket.broadcast.emit('newMessage', {
