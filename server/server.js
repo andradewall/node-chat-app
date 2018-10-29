@@ -3,7 +3,7 @@ const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 
-const {generateMessage} = require('./utils/message');
+const {generateMessage, generateLocationMessage} = require('./utils/message');
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
@@ -20,15 +20,22 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
 	console.log('New user connected');
 
+	// Emit an event
 	socket.emit('newMessage', generateMessage('Admin', 'Welcome to the Secret Sea'));
 	
+	// Emit an event but myself
 	socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
 
 	// Listening an event
 	socket.on('createMessage', (message, callback) => {
-		console.log('createMessage', message);
 		io.emit('newMessage', generateMessage(message.from, message.text));
 		callback('This is from the server.');
+	});
+
+	socket.on('createLocationMessage', (coords) => {
+		console.log('createLocationMessage listened');
+		io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
+		console.log('newLocationMessaged emitted');
 	});
 
 	// On disconnect with socket
