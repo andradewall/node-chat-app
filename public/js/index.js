@@ -10,12 +10,20 @@ socket.on('disconnect', function () {
 
 socket.on('newMessage', function (message) {
    console.log('New message arrived:', message);
+   var li = $('<li></li>');
+   li.text(`${message.from}: ${message.text}`);
+
+   $('#messages').append(li);
 });
 
-socket.on('userJoin', function (message) {
-   console.log('userJoin', message);
+$('#message-form').on('submit', function (e){
+   e.preventDefault();
+
+   socket.emit('createMessage', {
+      from: 'User',
+      text: $('[name=message]').val()
+   }, function () {
+
+   });
 });
 
-socket.on('userJoined', function (message) {
-   console.log('userJoined', message);
-});
