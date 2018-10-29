@@ -18,11 +18,28 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
 	console.log('New user connected');
 
+	socket.emit('userJoin', {
+		from: 'Admin',
+		text: 'Welcome to the Secret Sea'
+	});
+	
+	socket.broadcast.emit('userJoined', {
+		from: 'Admin',
+		text: 'New user joined'
+	});
+
 	// Listening an event
 	socket.on('createMessage', (message) => {
 		console.log('createMessage', message);
 		// Emitting an event to client
-		io.emit('newMessage', {
+		// io.emit('newMessage', {
+		// 	from: message.from,
+		// 	text: message.text,
+		// 	createdAt: new Date().getTime()
+		// });
+
+		// Emit an event to everybody but who sent the message
+		socket.broadcast.emit('newMessage', {
 			from: message.from,
 			text: message.text,
 			createdAt: new Date().getTime()
