@@ -20,12 +20,14 @@ io.on('connection', (socket) => {
 
 	socket.emit('userJoin', {
 		from: 'Admin',
-		text: 'Welcome to the Secret Sea'
+		text: 'Welcome to the Secret Sea',
+		createdAt: new Date().getTime()
 	});
 	
 	socket.broadcast.emit('userJoined', {
 		from: 'Admin',
-		text: 'New user joined'
+		text: 'New user joined',
+		createdAt: new Date().getTime()
 	});
 
 	// Listening an event
